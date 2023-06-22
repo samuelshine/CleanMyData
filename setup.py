@@ -1,9 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='CleanMyData',
-    version='1.0.0',
-    author=['Samuel Shine', 'Alex Benjamin'],
+    name='datascrub',
+    version='1.1.2',
+    author='Samuel Shine' and 'Alex Benjamin',
     author_email='samuelshine112003@gmail.com',
     description='A Python package for cleaning and preprocessing data in pandas DataFrames',
     long_description=open('README.md').read(),
@@ -22,11 +22,9 @@ setup(
     install_requires=[
         'pandas',
         'numpy',
-        'datetime',
         'charset_normalizer',
         'fuzzywuzzy',
         'scipy',
-        'dateutil',
         'emoji',
         'googletrans',
     ],

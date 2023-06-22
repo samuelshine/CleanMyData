@@ -7,17 +7,25 @@ from fuzzywuzzy import process
 import re
 from scipy import stats
 from pandas.api.types import is_numeric_dtype
-import dateutil.parser
 import emoji
 import string
 from googletrans import Translator
 
+
 class DataClean:
-    def __init__(self, filepath):
-        if filepath.endswith('.csv'):
-            self.raw_data = pd.read_csv(filepath)
-        elif filepath.endswith('.xlsx'):
-            self.raw_data = pd.read_excel(filepath)
+    def __init__(self, obj):
+      if isinstance(obj, pd.DataFrame):
+        # If data is a DataFrame, return it as it is
+        self.raw_data = obj
+      elif isinstance(obj, str):
+        # If data is a string, assume it's a file path and read the file into a DataFrame
+        if obj.endswith('.csv'):      #if data is a csv file
+            self.raw_data = pd.read_csv(obj)
+        elif obj.endswith('.xlsx'):   #if data is an excel file
+            self.raw_data = pd.read_excel(obj)
+      else:
+        # If the object type is not recognized, raise an error or return None as per your requirement
+        raise ValueError("Invalid data type. Please provide a DataFrame or a file path.")
 
     def clean_data(self, columns):
         """
@@ -191,19 +199,26 @@ class DataClean:
         translate_column_names (dict): Dictionary mapping column names to overwrite boolean values for translation.
 
         Returns:
-        pd.DataFrame: Updated DataFrame with cleaned, transformed, and translated columns.
+        pd.DataFrame: Updated DataFrame with cleaned and processed data.
         """
-        updated_data = self.clean_data(clean)
-        updated_data = self.handle_missing_values(missing_values)
-
-        if perform_scaling_normalization_bool:
-            updated_data = self.perform_scaling_normalization()
-
-        updated_data = self.explode_data(explode)
+        if missing_values:
+            self.raw_data = self.handle_missing_values(missing_values)
 
         if parse_date:
-            updated_data = self.parse_date_column(parse_date)
+            self.raw_data = self.parse_date_column(parse_date)
 
-        updated_data = self.translate_columns(translate_column_names)
+        if translate_column_names:
+            self.raw_data = self.translate_columns(translate_column_names)
 
-        return updated_data
+        if clean:
+            self.raw_data = self.clean_data(clean)
+
+        if perform_scaling_normalization_bool:
+            self.raw_data = self.perform_scaling_normalization()
+
+        if explode:
+            self.raw_data = self.explode_data(explode)
+
+        self.raw_data = self.dupli()
+
+        return self.raw_data
