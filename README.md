@@ -46,9 +46,3 @@ Contributions to DataScrub are welcome! If you encounter any bugs, have suggesti
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](https://github.com/samuelshine/CleanMyData/blob/main/LICENSE.txt) file for more information.
-
----
-
-Please note that you need to replace `'your-username'` with your actual GitHub username in the provided links. Additionally, make sure to update the actual links to your documentation and license files accordingly.
-
-Feel free to customize the content and formatting as per your project's requirements.
